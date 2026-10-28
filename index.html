@@ -20,29 +20,32 @@
       justify-content: center;
       padding: 24px;
     }
-    form { width: min(560px, 100%); }
+    form { width: auto; }
     .field {
-      position: relative;
+      display: inline-grid;
       background: #fff;
+      max-width: calc(100vw - 48px);
     }
-    .ghost, input {
+    .sizer, .ghost, input {
+      grid-area: 1 / 1;
       font-family: inherit;
       font-size: 18px;
       line-height: 1.2;
-      padding: 16px 22px;
+      padding: 4px 8px;
       border: 0;
       border-radius: 0;
+      white-space: pre;
+    }
+    .sizer {
+      visibility: hidden;
+      min-width: 1ch;
     }
     .ghost {
-      position: absolute;
-      inset: 0;
       color: #9a9a9a;
       pointer-events: none;
-      white-space: pre;
       overflow: hidden;
     }
     input {
-      position: relative;
       width: 100%;
       background: transparent;
       color: #111;
@@ -55,6 +58,7 @@
   <main>
     <form id="search" action="https://www.google.com/search" method="get">
       <div class="field">
+        <span class="sizer" id="sizer"></span>
         <div class="ghost" id="ghost" aria-hidden="true"></div>
         <input id="q" name="q" type="search" autocomplete="off" aria-label="Search">
       </div>
@@ -64,12 +68,14 @@
     const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv"];
     const input = document.getElementById("q");
     const ghost = document.getElementById("ghost");
+    const sizer = document.getElementById("sizer");
     const suggestion = terms[Math.floor(Math.random() * terms.length)];
 
     function paint() {
       const value = input.value;
       const matches = suggestion.toLowerCase().startsWith(value.toLowerCase());
       ghost.textContent = matches ? suggestion : "";
+      sizer.textContent = ghost.textContent || value || " ";
     }
 
     input.addEventListener("input", paint);
