@@ -16,82 +16,65 @@
     main {
       min-height: 100%;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      gap: 18px;
     }
     form { width: min(560px, 100%); }
-    input {
-      width: 100%;
+    .field {
+      position: relative;
       background: #fff;
-      color: #111;
+      border-radius: 999px;
+    }
+    .ghost, input {
+      font-family: inherit;
+      font-size: 18px;
+      line-height: 1.2;
+      padding: 16px 22px;
       border: 0;
       border-radius: 999px;
-      padding: 16px 22px;
-      font-size: 18px;
+    }
+    .ghost {
+      position: absolute;
+      inset: 0;
+      color: #9a9a9a;
+      pointer-events: none;
+      white-space: pre;
+      overflow: hidden;
+    }
+    input {
+      position: relative;
+      width: 100%;
+      background: transparent;
+      color: #111;
       outline: none;
     }
-    input::placeholder { color: #8a8a8a; }
-    .suggestions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      max-width: 560px;
-    }
-    button.chip {
-      background: transparent;
-      color: #fff;
-      border: 1px solid #333;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    button.chip:hover { border-color: #fff; }
+    input::-webkit-search-cancel-button { display: none; }
   </style>
 </head>
 <body>
   <main>
     <form id="search" action="https://www.google.com/search" method="get">
-      <input id="q" name="q" type="search" autocomplete="off" aria-label="Search" placeholder="Facebook">
+      <div class="field">
+        <div class="ghost" id="ghost" aria-hidden="true"></div>
+        <input id="q" name="q" type="search" autocomplete="off" aria-label="Search">
+      </div>
     </form>
-    <div class="suggestions" id="suggestions"></div>
   </main>
   <script>
     const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv"];
     const input = document.getElementById("q");
-    const suggestions = document.getElementById("suggestions");
+    const ghost = document.getElementById("ghost");
+    const suggestion = terms[Math.floor(Math.random() * terms.length)];
 
-    function shuffle(list) {
-      const copy = list.slice();
-      for (let i = copy.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [copy[i], copy[j]] = [copy[j], copy[i]];
-      }
-      return copy;
+    function paint() {
+      const value = input.value;
+      const matches = suggestion.toLowerCase().startsWith(value.toLowerCase());
+      ghost.textContent = matches ? suggestion : "";
     }
 
-    function render() {
-      const order = shuffle(terms);
-      input.placeholder = order[0];
-      suggestions.innerHTML = "";
-      order.slice(1).forEach((term) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "chip";
-        button.textContent = term;
-        button.addEventListener("click", () => {
-          input.value = term;
-          input.focus();
-        });
-        suggestions.appendChild(button);
-      });
-    }
-
-    render();
+    input.addEventListener("input", paint);
+    paint();
   </script>
 </body>
 </html>
