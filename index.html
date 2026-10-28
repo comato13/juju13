@@ -81,6 +81,38 @@
 
     input.addEventListener("input", paint);
     paint();
+
+    function editDistance(a, b) {
+      const rows = Array.from({ length: a.length + 1 }, (_, i) => [i]);
+      for (let j = 0; j <= b.length; j++) rows[0][j] = j;
+      for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+          rows[i][j] = a[i - 1] === b[j - 1]
+            ? rows[i - 1][j - 1]
+            : 1 + Math.min(rows[i - 1][j], rows[i][j - 1], rows[i - 1][j - 1]);
+        }
+      }
+      return rows[a.length][b.length];
+    }
+
+    function destination(query) {
+      const word = query.trim().toLowerCase();
+      if (!word) return "";
+      if (word === "fb" || word === "facebook") return "https://www.facebook.com/cloud.sep0/";
+      const likeInstagram = word === "ig"
+        || word === "insta"
+        || word.startsWith("instag")
+        || editDistance(word, "instagram") <= 2;
+      if (likeInstagram) return "https://www.instagram.com/13m.juju/";
+      return "https://www.google.com/search?q=" + encodeURIComponent(query.trim());
+    }
+
+    document.getElementById("search").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const query = input.value.trim() || (ghost.textContent ? suggestion : "");
+      const url = destination(query);
+      if (url) location.href = url;
+    });
   </script>
 </body>
 </html>
