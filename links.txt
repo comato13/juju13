@@ -1,0 +1,12 @@
+# Words that orbit the cat, and the site each one opens.
+# Edit this file instead of the script. One link per line:
+#   the text people see -> https://the.site/they/open
+# Blank lines and lines starting with # are ignored.
+
+Facebook -> https://www.facebook.com/cloud.sep0/
+fb -> https://www.facebook.com/cloud.sep0/
+ig -> https://www.instagram.com/13m.juju/
+Instagram -> https://www.instagram.com/13m.juju/
+game -> https://www.google.com/search?q=game
+cv -> https://www.google.com/search?q=cv
+music -> https://www.youtube.com/watch?v=09-iCp0gwXQ

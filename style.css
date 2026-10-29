@@ -1,4 +1,9 @@
-﻿    * { box-sizing: border-box; }
+﻿    @font-face {
+      font-family: "Ancient Medium";
+      src: url("fonts/ancient-medium.ttf") format("truetype");
+      font-display: swap;
+    }
+    * { box-sizing: border-box; }
     html, body {
       margin: 0;
       height: 100%;
@@ -284,7 +289,8 @@
       margin: 0;
       padding: 0;
       font: inherit;
-      font-size: 16px;
+      font-family: "Ancient Medium", system-ui, sans-serif;
+      font-size: 11px;
       line-height: 1.2;
       --hit: 0;
       color: color-mix(in srgb, #161616 calc(var(--hit) * 100%), #fff);
@@ -301,7 +307,7 @@
       margin: 0;
       pointer-events: none;
       white-space: pre;
-      font-family: inherit;
+      font-family: "Ancient Medium", system-ui, sans-serif;
       line-height: 1.2;
       user-select: none;
     }
@@ -330,8 +336,8 @@
     }
     .sizer, .ghost, input {
       grid-area: 1 / 1;
-      font-family: inherit;
-      font-size: 18px;
+      font-family: "Ancient Medium", system-ui, sans-serif;
+      font-size: 11px;
       line-height: 1.2;
       padding: 4px 8px;
       border: 0;

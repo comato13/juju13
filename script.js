@@ -129,7 +129,8 @@
 
     document.addEventListener("mousemove", moveIrises);
 
-    const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv", "music"];
+    let links = [];
+    let slots = [];
     const input = document.getElementById("q");
     const ghost = document.getElementById("ghost");
     const sizer = document.getElementById("sizer");
@@ -152,7 +153,24 @@
       { period: 14, turn: -1, eccentricity: 0.48 }
     ];
 
-    const slots = terms.map((term, index) => {
+    function parseLinks(text) {
+      const items = [];
+      text.split(/\r?\n/).forEach((raw) => {
+        const line = raw.trim();
+        if (!line || line.startsWith("#")) return;
+        const arrow = line.indexOf("->");
+        if (arrow === -1) return;
+        const label = line.slice(0, arrow).trim();
+        const url = line.slice(arrow + 2).trim();
+        if (label && url) items.push({ label, url });
+      });
+      return items;
+    }
+
+    function buildOrbits() {
+      orbit.replaceChildren();
+      slots = links.map((item, index) => {
+      const term = item.label;
       const motion = rings[index % rings.length];
       const ring = document.createElement("div");
       ring.className = "ring";
@@ -184,6 +202,7 @@
       };
       return entry;
     });
+    }
 
     function eccentricAnomaly(mean, eccentricity) {
       let anomaly = mean;
@@ -224,18 +243,25 @@
       });
     }
 
-    syncOrbit();
+    fetch("links.txt")
+      .then((response) => response.text())
+      .then((text) => {
+        links = parseLinks(text);
+        buildOrbits();
+        syncOrbit();
+        paint();
+      });
 
     function paint() {
       const value = input.value;
       const folded = value.toLowerCase();
       suggestion = "";
       if (folded && !reserve) {
-        const match = terms.find((term) => {
-          const foldedTerm = term.toLowerCase();
+        const match = links.find((item) => {
+          const foldedTerm = item.label.toLowerCase();
           return foldedTerm.startsWith(folded) && foldedTerm !== folded;
         });
-        suggestion = match || "";
+        suggestion = match ? match.label : "";
       }
       ghost.textContent = suggestion;
       sizer.textContent = suggestion || value || reserve || " ";
@@ -397,13 +423,12 @@
     function destination(query) {
       const word = query.trim().toLowerCase();
       if (!word) return "";
-      if (word === "fb" || word === "facebook") return "https://www.facebook.com/cloud.sep0/";
-      const likeInstagram = word === "ig"
-        || word === "insta"
-        || word.startsWith("instag")
-        || editDistance(word, "instagram") <= 2;
-      if (likeInstagram) return "https://www.instagram.com/13m.juju/";
-      if (word === "music") return "https://www.youtube.com/watch?v=09-iCp0gwXQ";
+      const exact = links.find((item) => item.label.toLowerCase() === word);
+      if (exact) return exact.url;
+      const prefixed = links.filter((item) => item.label.toLowerCase().startsWith(word));
+      if (prefixed.length === 1) return prefixed[0].url;
+      const close = links.filter((item) => editDistance(word, item.label.toLowerCase()) <= 2);
+      if (close.length === 1) return close[0].url;
       return "https://www.google.com/search?q=" + encodeURIComponent(query.trim());
     }
 
