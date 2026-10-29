@@ -3,11 +3,11 @@
 #   the text people see -> https://the.site/they/open
 # Blank lines and lines starting with # are ignored.
 
-fb -> https://www.facebook.com/cloud.sep0/
-ig -> https://www.instagram.com/13m.juju/
+facebook -> https://www.facebook.com/cloud.sep0/
+instagram -> https://www.instagram.com/13m.juju/
 cv -> https://www.google.com/search?q=cv
 music -> https://www.youtube.com/watch?v=09-iCp0gwXQ
 steam1 -> https://steamcommunity.com/id/nl4e
 steam2 -> https://steamcommunity.com/id/agentboo/
-vlr -> https://tracker.gg/valorant/profile/riot/HedonisticAdonis%23jj13/overview
+valorant -> https://tracker.gg/valorant/profile/riot/HedonisticAdonis%23jj13/overview
 faceit -> https://www.faceit.com/en/players/monkelele13
