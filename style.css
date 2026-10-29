@@ -253,6 +253,77 @@
       transition: transform 0.12s ease, width 0.12s ease;
     }
 
+    .orbit {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 4;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+    .ring {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      height: 0;
+      animation: orbit-spin var(--duration) linear infinite;
+      animation-direction: var(--turn);
+    }
+    .slot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: rotate(var(--angle)) translateY(calc(var(--r) * -1));
+    }
+    .rec {
+      position: absolute;
+      left: 0;
+      top: 0;
+      appearance: none;
+      background: transparent;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      font: inherit;
+      font-size: 16px;
+      line-height: 1.2;
+      color: #fff;
+      white-space: nowrap;
+      cursor: pointer;
+      pointer-events: auto;
+      user-select: none;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+      transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
+      animation: rec-upright var(--duration) linear infinite;
+      animation-direction: var(--turn);
+    }
+    .rec:hover { text-decoration: underline; text-underline-offset: 0.22em; }
+    body.toggled .rec {
+      color: #161616;
+      text-shadow: none;
+    }
+    .flyer {
+      position: fixed;
+      z-index: 8;
+      margin: 0;
+      pointer-events: none;
+      white-space: pre;
+      font-family: inherit;
+      line-height: 1.2;
+      user-select: none;
+    }
+    @keyframes orbit-spin {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes rec-upright {
+      to { transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1 - 360deg)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ring, .rec { animation: none; }
+    }
+
     main {
       position: absolute;
       inset: 0;
