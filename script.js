@@ -144,12 +144,12 @@
     const motions = new Map();
 
     const rings = [
-      { duration: "21s", turn: "normal" },
-      { duration: "29s", turn: "reverse" },
-      { duration: "25s", turn: "normal" },
-      { duration: "36s", turn: "reverse" },
-      { duration: "23s", turn: "normal" },
-      { duration: "33s", turn: "reverse" }
+      { duration: "12s", turn: "normal" },
+      { duration: "16s", turn: "reverse" },
+      { duration: "14s", turn: "normal" },
+      { duration: "18s", turn: "reverse" },
+      { duration: "13s", turn: "normal" },
+      { duration: "17s", turn: "reverse" }
     ];
 
     const slots = terms.map((term, index) => {
@@ -158,6 +158,8 @@
       ring.className = "ring";
       ring.style.setProperty("--duration", motion.duration);
       ring.style.setProperty("--turn", motion.turn);
+      ring.style.animation = "orbit-spin " + motion.duration + " linear infinite";
+      ring.style.animationDirection = motion.turn;
       const slot = document.createElement("div");
       slot.className = "slot";
       slot.style.setProperty("--angle", (137.5 * index) + "deg");
@@ -165,6 +167,8 @@
       label.type = "button";
       label.className = "rec";
       label.textContent = term;
+      label.style.animation = "rec-upright " + motion.duration + " linear infinite";
+      label.style.animationDirection = motion.turn;
       label.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -254,8 +258,7 @@
       flyer.style.color = startColor;
       document.body.appendChild(flyer);
 
-      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const duration = reduce ? 1 : 680;
+      const duration = 680;
       const started = performance.now();
       let frame = 0;
       let stopped = false;
@@ -269,7 +272,7 @@
         const dx = target.left - fromRect.left;
         const dy = target.top - fromRect.top;
         const length = Math.hypot(dx, dy) || 1;
-        const arc = Math.sin(Math.PI * progress) * (reduce ? 0 : 26);
+        const arc = Math.sin(Math.PI * progress) * 26;
         const x = fromRect.left + dx * eased + (-dy / length) * arc;
         const y = fromRect.top + dy * eased + (dx / length) * arc;
         flyer.style.left = x + "px";

@@ -320,10 +320,6 @@
     @keyframes rec-upright {
       to { transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1 - 360deg)); }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .ring, .rec { animation: none; }
-    }
-
     main {
       position: absolute;
       inset: 0;
