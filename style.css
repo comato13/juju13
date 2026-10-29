@@ -268,8 +268,6 @@
       top: 0;
       width: 0;
       height: 0;
-      animation: orbit-spin var(--duration) linear infinite;
-      animation-direction: var(--turn);
     }
     .slot {
       position: absolute;
@@ -289,21 +287,15 @@
       font: inherit;
       font-size: 16px;
       line-height: 1.2;
-      color: #fff;
+      --hit: 0;
+      color: color-mix(in srgb, #161616 calc(var(--hit) * 100%), #fff);
       white-space: nowrap;
       cursor: pointer;
       pointer-events: auto;
       user-select: none;
-      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
-      transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1));
-      animation: rec-upright var(--duration) linear infinite;
-      animation-direction: var(--turn);
+      text-shadow: 0 1px 2px rgb(0 0 0 / calc((1 - var(--hit)) * 0.45));
     }
     .rec:hover { text-decoration: underline; text-underline-offset: 0.22em; }
-    body.toggled .rec {
-      color: #161616;
-      text-shadow: none;
-    }
     .flyer {
       position: fixed;
       z-index: 8;
@@ -313,12 +305,6 @@
       font-family: inherit;
       line-height: 1.2;
       user-select: none;
-    }
-    @keyframes orbit-spin {
-      to { transform: rotate(360deg); }
-    }
-    @keyframes rec-upright {
-      to { transform: translate(-50%, -50%) rotate(calc(var(--angle) * -1 - 360deg)); }
     }
     main {
       position: absolute;

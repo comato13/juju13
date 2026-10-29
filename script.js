@@ -26,7 +26,7 @@
     };
 
     const syncColors = () => {
-      document.querySelectorAll(".cat, .field").forEach((element) => {
+      document.querySelectorAll(".cat, .field, .rec").forEach((element) => {
         element.style.setProperty("--hit", hitAmount(element).toFixed(3));
       });
     };
@@ -144,31 +144,26 @@
     const motions = new Map();
 
     const rings = [
-      { duration: "12s", turn: "normal" },
-      { duration: "16s", turn: "reverse" },
-      { duration: "14s", turn: "normal" },
-      { duration: "18s", turn: "reverse" },
-      { duration: "13s", turn: "normal" },
-      { duration: "17s", turn: "reverse" }
+      { period: 12, turn: 1 },
+      { period: 16, turn: -1 },
+      { period: 14, turn: 1 },
+      { period: 18, turn: -1 },
+      { period: 13, turn: 1 },
+      { period: 17, turn: -1 }
     ];
 
     const slots = terms.map((term, index) => {
       const motion = rings[index % rings.length];
+      const angle = 137.5 * index;
       const ring = document.createElement("div");
       ring.className = "ring";
-      ring.style.setProperty("--duration", motion.duration);
-      ring.style.setProperty("--turn", motion.turn);
-      ring.style.animation = "orbit-spin " + motion.duration + " linear infinite";
-      ring.style.animationDirection = motion.turn;
       const slot = document.createElement("div");
       slot.className = "slot";
-      slot.style.setProperty("--angle", (137.5 * index) + "deg");
+      slot.style.setProperty("--angle", angle + "deg");
       const label = document.createElement("button");
       label.type = "button";
       label.className = "rec";
       label.textContent = term;
-      label.style.animation = "rec-upright " + motion.duration + " linear infinite";
-      label.style.animationDirection = motion.turn;
       label.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -177,9 +172,30 @@
       slot.appendChild(label);
       ring.appendChild(slot);
       orbit.appendChild(ring);
-      const entry = { term, slot, label, state: "orbit" };
+      const entry = {
+        term,
+        slot,
+        label,
+        ring,
+        state: "orbit",
+        period: motion.period,
+        turn: motion.turn,
+        angle
+      };
       return entry;
     });
+
+    const orbitStart = performance.now();
+    function spinOrbit(now) {
+      const seconds = (now - orbitStart) / 1000;
+      slots.forEach((entry) => {
+        const spin = (seconds / entry.period) * 360 * entry.turn;
+        entry.ring.style.transform = "rotate(" + spin + "deg)";
+        entry.label.style.transform = "translate(-50%, -50%) rotate(" + (-(spin + entry.angle)) + "deg)";
+      });
+      requestAnimationFrame(spinOrbit);
+    }
+    requestAnimationFrame(spinOrbit);
 
     function syncOrbit() {
       const half = Math.min(window.innerWidth, window.innerHeight) / 2;
