@@ -355,8 +355,8 @@
       overflow: hidden;
     }
     input {
-      width: 100%;
-      min-width: 0;
+      width: 0;
+      min-width: 100%;
       appearance: none;
       background: transparent;
       color: color-mix(in srgb, #fff calc(var(--hit) * 100%), #111);

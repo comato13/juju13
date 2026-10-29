@@ -84,6 +84,7 @@
     window.onresize = () => {
       createGrid();
       syncOrbit();
+      fitField();
     };
 
     const irises = document.querySelectorAll(".eye");
@@ -265,6 +266,23 @@
       }
       ghost.textContent = suggestion;
       sizer.textContent = suggestion || value || reserve || " ";
+      fitField();
+    }
+
+    function fitField() {
+      const text = sizer.textContent || " ";
+      const style = getComputedStyle(input);
+      const max = Math.max(48, window.innerWidth - 48);
+      measure.style.fontFamily = style.fontFamily;
+      measure.style.fontSize = "27px";
+      measure.style.lineHeight = "1";
+      measure.textContent = text;
+      const natural = Math.max(1, measure.offsetWidth);
+      const size = natural > max ? 27 * (max / natural) : 27;
+      const pixels = size + "px";
+      sizer.style.fontSize = pixels;
+      ghost.style.fontSize = pixels;
+      input.style.fontSize = pixels;
     }
 
     function searchTextRect(text) {
@@ -298,14 +316,20 @@
         : 1 - Math.pow(-2 * amount + 2, 3) / 2;
     }
 
+    function randomFlowColor() {
+      const hue = Math.floor(Math.random() * 360);
+      return "hsl(" + hue + ", 85%, 64%)";
+    }
+
     function fly(slot, fromRect, getTarget, direction, onDone) {
       const previous = motions.get(slot.term);
       if (previous) previous.cancel();
 
       const labelStyle = getComputedStyle(slot.label);
       const fieldStyle = getComputedStyle(input);
-      const startColor = direction === "in" ? labelStyle.color : fieldStyle.color;
-      const endColor = direction === "in" ? fieldStyle.color : labelStyle.color;
+      const flow = direction === "in" ? randomFlowColor() : "";
+      const startColor = flow || (direction === "in" ? labelStyle.color : fieldStyle.color);
+      const endColor = flow || (direction === "in" ? fieldStyle.color : labelStyle.color);
       const startSize = parseFloat(direction === "in" ? labelStyle.fontSize : fieldStyle.fontSize);
       const endSize = parseFloat(direction === "in" ? fieldStyle.fontSize : labelStyle.fontSize);
       const flyer = document.createElement("span");
