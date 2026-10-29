@@ -290,7 +290,7 @@
       padding: 0;
       font: inherit;
       font-family: "Ancient Medium", system-ui, sans-serif;
-      font-size: 20px;
+      font-size: 27px;
       line-height: 1.2;
       --hit: 0;
       color: color-mix(in srgb, #161616 calc(var(--hit) * 100%), #fff);
@@ -328,7 +328,7 @@
     }
     .field {
       display: inline-grid;
-      background: #fff;
+      width: max-content;
       max-width: calc(100vw - 48px);
       border-radius: 999px;
       --hit: 0;
@@ -337,16 +337,17 @@
     .sizer, .ghost, input {
       grid-area: 1 / 1;
       font-family: "Ancient Medium", system-ui, sans-serif;
-      font-size: 11px;
-      line-height: 1.2;
-      padding: 4px 8px;
+      font-size: 27px;
+      line-height: 1;
+      padding: 0;
       border: 0;
       border-radius: 0;
       white-space: pre;
     }
     .sizer {
       visibility: hidden;
-      min-width: 1ch;
+      width: max-content;
+      min-width: 0;
     }
     .ghost {
       color: color-mix(in srgb, #6e6e6e calc(var(--hit) * 100%), #9a9a9a);
@@ -356,6 +357,7 @@
     input {
       width: 100%;
       min-width: 0;
+      appearance: none;
       background: transparent;
       color: color-mix(in srgb, #fff calc(var(--hit) * 100%), #111);
       outline: none;
