@@ -266,18 +266,24 @@
       }
       ghost.textContent = suggestion;
       sizer.textContent = suggestion || value || reserve || " ";
+      const field = input.closest(".field");
+      const hasText = Boolean(value || reserve);
+      field.classList.toggle("is-empty", !hasText);
+      field.classList.toggle("is-picked", Boolean(held));
       fitField();
     }
 
     function fitField() {
       const text = sizer.textContent || " ";
       const style = getComputedStyle(input);
+      const padEm = input.closest(".field").classList.contains("is-picked") ? 1.6 : 0.45;
+      const pad = padEm * 2 * 27;
       const max = Math.max(48, window.innerWidth - 48);
       measure.style.fontFamily = style.fontFamily;
       measure.style.fontSize = "27px";
       measure.style.lineHeight = "1";
       measure.textContent = text;
-      const natural = Math.max(1, measure.offsetWidth);
+      const natural = Math.max(1, measure.offsetWidth + pad);
       const size = natural > max ? 27 * (max / natural) : 27;
       const pixels = size + "px";
       sizer.style.fontSize = pixels;

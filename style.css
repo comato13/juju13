@@ -339,7 +339,7 @@
       font-family: "Ancient Medium", system-ui, sans-serif;
       font-size: 27px;
       line-height: 1;
-      padding: 0 0.45em;
+      padding: 0 var(--field-pad, 0.45em);
       border: 0;
       border-radius: 0;
       white-space: pre;
@@ -348,6 +348,12 @@
       visibility: hidden;
       width: max-content;
       min-width: 0;
+    }
+    .field.is-empty .sizer {
+      min-width: 8.5em;
+    }
+    .field.is-picked {
+      --field-pad: 1.6em;
     }
     .ghost {
       color: color-mix(in srgb, #6e6e6e calc(var(--hit) * 100%), #9a9a9a);
