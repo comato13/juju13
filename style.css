@@ -328,11 +328,24 @@
     }
     .field {
       display: inline-grid;
+      position: relative;
       width: max-content;
       max-width: calc(100vw - 48px);
       border-radius: 999px;
       --hit: 0;
       background: color-mix(in srgb, #000 calc(var(--hit) * 100%), #fff);
+    }
+    .tail {
+      position: absolute;
+      right: 12px;
+      bottom: -14px;
+      width: 26px;
+      height: 20px;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .tail path {
+      fill: color-mix(in srgb, #000 calc(var(--hit) * 100%), #fff);
     }
     .sizer, .ghost, input {
       grid-area: 1 / 1;
