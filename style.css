@@ -54,7 +54,7 @@
       pointer-events: none;
       transition: filter 0.35s ease;
     }
-    body.toggled .cat {
+    .cat.revealed {
       filter: invert(1);
     }
     .stripe .stripe1 {
@@ -253,7 +253,7 @@
       border-radius: 999px;
       transition: background 0.35s ease;
     }
-    body.toggled .field { background: #000; }
+    .field.revealed { background: #000; }
     .sizer, .ghost, input {
       grid-area: 1 / 1;
       font-family: inherit;
@@ -274,7 +274,7 @@
       overflow: hidden;
       transition: color 0.35s ease;
     }
-    body.toggled .ghost { color: #6e6e6e; }
+    .field.revealed .ghost { color: #6e6e6e; }
     input {
       width: 100%;
       min-width: 0;
@@ -284,7 +284,7 @@
       caret-color: #111;
       transition: color 0.35s ease, caret-color 0.35s ease;
     }
-    body.toggled input {
+    .field.revealed input {
       color: #fff;
       caret-color: #fff;
     }

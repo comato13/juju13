@@ -1,13 +1,46 @@
 ﻿    const wrapper = document.getElementById("tiles");
     let columns = 0, rows = 0, toggled = false;
 
-    const toggle = () => {
-      toggled = !toggled;
-      document.body.classList.toggle("toggled");
+    let colorTimers = [];
+
+    const clearColorTimers = () => {
+      colorTimers.forEach(clearTimeout);
+      colorTimers = [];
+    };
+
+    const waveDelay = (fromIndex, rect) => {
+      const fromCol = fromIndex % columns;
+      const fromRow = Math.floor(fromIndex / columns);
+      const tileW = wrapper.clientWidth / columns;
+      const tileH = wrapper.clientHeight / rows;
+      const c0 = Math.max(0, Math.floor(rect.left / tileW));
+      const c1 = Math.min(columns - 1, Math.floor((rect.right - 0.01) / tileW));
+      const r0 = Math.max(0, Math.floor(rect.top / tileH));
+      const r1 = Math.min(rows - 1, Math.floor((rect.bottom - 0.01) / tileH));
+      let min = Infinity;
+      for (let row = r0; row <= r1; row++) {
+        for (let col = c0; col <= c1; col++) {
+          const dx = fromCol - col;
+          const dy = fromRow - row;
+          min = Math.min(min, Math.sqrt(dx * dx + dy * dy));
+        }
+      }
+      return (min === Infinity ? 0 : min) * 50;
+    };
+
+    const scheduleReveal = (element, revealed, delay) => {
+      colorTimers.push(setTimeout(() => {
+        element.classList.toggle("revealed", revealed);
+      }, delay));
     };
 
     const handleOnClick = index => {
-      toggle();
+      toggled = !toggled;
+      document.body.classList.toggle("toggled", toggled);
+      clearColorTimers();
+      const field = document.querySelector(".field");
+      scheduleReveal(document.querySelector(".cat"), toggled, waveDelay(index, document.querySelector(".cat").getBoundingClientRect()));
+      scheduleReveal(field, toggled, waveDelay(index, field.getBoundingClientRect()));
       anime({
         targets: ".tile",
         opacity: toggled ? 0 : 1,
