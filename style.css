@@ -167,6 +167,30 @@
     }
     .cat .nose:before { left: -10px; }
     .cat .nose:after { left: 8px; }
+    .cat .whiskers {
+      position: absolute;
+      top: 72px;
+      width: 28px;
+      height: 24px;
+      z-index: 5;
+    }
+    .cat .whiskers.left { left: 8px; }
+    .cat .whiskers.right { right: 8px; }
+    .cat .whiskers span {
+      position: absolute;
+      left: 0;
+      width: 26px;
+      height: 2px;
+      background: #111;
+      border-radius: 2px;
+    }
+    .cat .whiskers.right span { left: auto; right: 0; }
+    .cat .whiskers.left span:nth-child(1) { top: 2px; transform: rotate(-16deg); transform-origin: right center; }
+    .cat .whiskers.left span:nth-child(2) { top: 10px; }
+    .cat .whiskers.left span:nth-child(3) { top: 18px; transform: rotate(16deg); transform-origin: right center; }
+    .cat .whiskers.right span:nth-child(1) { top: 2px; transform: rotate(16deg); transform-origin: left center; }
+    .cat .whiskers.right span:nth-child(2) { top: 10px; }
+    .cat .whiskers.right span:nth-child(3) { top: 18px; transform: rotate(-16deg); transform-origin: left center; }
     .cat .mouth {
       border: 3px solid #111;
       width: 12px;
