@@ -1,20 +1,58 @@
 ﻿    const wrapper = document.getElementById("tiles");
     let columns = 0, rows = 0, toggled = false;
 
-    const toggle = () => {
-      toggled = !toggled;
-      document.body.classList.toggle("toggled");
+    let waveId = 0;
+
+    const hitAmount = (element) => {
+      const rect = element.getBoundingClientRect();
+      const tileW = wrapper.clientWidth / columns;
+      const tileH = wrapper.clientHeight / rows;
+      const c0 = Math.max(0, Math.floor(rect.left / tileW));
+      const c1 = Math.min(columns - 1, Math.floor((rect.right - 0.01) / tileW));
+      const r0 = Math.max(0, Math.floor(rect.top / tileH));
+      const r1 = Math.min(rows - 1, Math.floor((rect.bottom - 0.01) / tileH));
+      let sum = 0;
+      let count = 0;
+      for (let row = r0; row <= r1; row++) {
+        for (let col = c0; col <= c1; col++) {
+          const tile = wrapper.children[row * columns + col];
+          if (!tile) continue;
+          const opacity = tile.style.opacity === "" ? 1 : parseFloat(tile.style.opacity);
+          sum += opacity;
+          count++;
+        }
+      }
+      return count ? 1 - sum / count : 0;
+    };
+
+    const syncColors = () => {
+      document.querySelectorAll(".cat, .field").forEach((element) => {
+        element.style.setProperty("--hit", hitAmount(element).toFixed(3));
+      });
     };
 
     const handleOnClick = index => {
-      toggle();
+      const id = ++waveId;
+      toggled = !toggled;
+      document.body.classList.toggle("toggled", toggled);
+      const follow = () => {
+        if (id !== waveId) return;
+        syncColors();
+        requestAnimationFrame(follow);
+      };
+      requestAnimationFrame(follow);
       anime({
         targets: ".tile",
         opacity: toggled ? 0 : 1,
         delay: anime.stagger(50, {
           grid: [columns, rows],
           from: index
-        })
+        }),
+        complete: () => {
+          if (id !== waveId) return;
+          waveId++;
+          syncColors();
+        }
       });
     };
 
@@ -46,10 +84,30 @@
     window.onresize = () => createGrid();
 
     const irises = document.querySelectorAll(".eye");
-    const maxLookX = 6;
-    const maxLookY = 6;
+    const cat = document.querySelector(".cat");
+    const maxLookX = 5;
+    const maxLookY = 4;
+
+    function resetIrises() {
+      irises.forEach((eye) => {
+        const pupil = eye.querySelector(".iris-before");
+        pupil.style.transform = "translate(-50%, -50%)";
+        pupil.style.width = "7px";
+      });
+    }
 
     function moveIrises(event) {
+      const rect = cat.getBoundingClientRect();
+      const catCenterX = rect.left + rect.width / 2;
+      const inRange = Math.abs(event.clientX - catCenterX) <= 800
+        && event.clientY >= rect.top
+        && event.clientY <= rect.bottom;
+
+      if (!inRange) {
+        resetIrises();
+        return;
+      }
+
       irises.forEach((eye) => {
         const pupil = eye.querySelector(".iris-before");
         const box = eye.getBoundingClientRect();
@@ -61,13 +119,14 @@
         const clamp = Math.min(1, 1 / mag);
         const x = nx * clamp * maxLookX;
         const y = ny * clamp * maxLookY;
+        pupil.style.width = "14px";
         pupil.style.transform = "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))";
       });
     }
 
     document.addEventListener("mousemove", moveIrises);
 
-    const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv"];
+    const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv", "music"];
     const input = document.getElementById("q");
     const ghost = document.getElementById("ghost");
     const sizer = document.getElementById("sizer");
@@ -105,6 +164,7 @@
         || word.startsWith("instag")
         || editDistance(word, "instagram") <= 2;
       if (likeInstagram) return "https://www.instagram.com/13m.juju/";
+      if (word === "music") return "https://www.youtube.com/watch?v=09-iCp0gwXQ";
       return "https://www.google.com/search?q=" + encodeURIComponent(query.trim());
     }
 

@@ -52,6 +52,8 @@
       margin: -60px 0 0 -75px;
       z-index: 3;
       pointer-events: none;
+      --hit: 0;
+      filter: invert(var(--hit));
     }
     .stripe .stripe1 {
       position: relative;
@@ -135,11 +137,10 @@
       position: absolute;
       border: 3px solid #111;
       background: #f4f4f4;
-      width: 26px;
-      height: 26px;
-      top: 40px;
+      width: 24px;
+      height: 14px;
+      top: 45px;
       border-radius: 50%;
-      overflow: hidden;
     }
     .cat .eye.left { left: 50px; margin: 0 0 0 -15px; }
     .cat .eye.right { right: 50px; margin: 0 -15px 0 0; }
@@ -166,6 +167,30 @@
     }
     .cat .nose:before { left: -10px; }
     .cat .nose:after { left: 8px; }
+    .cat .whiskers {
+      position: absolute;
+      top: 72px;
+      width: 28px;
+      height: 24px;
+      z-index: 5;
+    }
+    .cat .whiskers.left { right: 8px; left: auto; }
+    .cat .whiskers.right { left: 8px; right: auto; }
+    .cat .whiskers span {
+      position: absolute;
+      left: 0;
+      width: 26px;
+      height: 2px;
+      background: #111;
+      border-radius: 2px;
+    }
+    .cat .whiskers.right span { left: auto; right: 0; }
+    .cat .whiskers.left span:nth-child(1) { top: 2px; transform: rotate(-16deg); transform-origin: right center; }
+    .cat .whiskers.left span:nth-child(2) { top: 10px; }
+    .cat .whiskers.left span:nth-child(3) { top: 18px; transform: rotate(16deg); transform-origin: right center; }
+    .cat .whiskers.right span:nth-child(1) { top: 2px; transform: rotate(16deg); transform-origin: left center; }
+    .cat .whiskers.right span:nth-child(2) { top: 10px; }
+    .cat .whiskers.right span:nth-child(3) { top: 18px; transform: rotate(-16deg); transform-origin: left center; }
     .cat .mouth {
       border: 3px solid #111;
       width: 12px;
@@ -217,15 +242,15 @@
       top: 79px;
     }
     .iris-before {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 14px;
       background: #111;
       border-radius: 50%;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      transition: transform 0.08s linear;
+      transition: transform 0.12s ease, width 0.12s ease;
     }
 
     main {
@@ -247,9 +272,10 @@
       display: inline-grid;
       background: #fff;
       max-width: calc(100vw - 48px);
-      transition: background 0.35s ease;
+      border-radius: 999px;
+      --hit: 0;
+      background: color-mix(in srgb, #000 calc(var(--hit) * 100%), #fff);
     }
-    body.toggled .field { background: #000; }
     .sizer, .ghost, input {
       grid-area: 1 / 1;
       font-family: inherit;
@@ -265,23 +291,16 @@
       min-width: 1ch;
     }
     .ghost {
-      color: #9a9a9a;
+      color: color-mix(in srgb, #6e6e6e calc(var(--hit) * 100%), #9a9a9a);
       pointer-events: none;
       overflow: hidden;
-      transition: color 0.35s ease;
     }
-    body.toggled .ghost { color: #6e6e6e; }
     input {
       width: 100%;
       min-width: 0;
       background: transparent;
-      color: #111;
+      color: color-mix(in srgb, #fff calc(var(--hit) * 100%), #111);
       outline: none;
-      caret-color: #111;
-      transition: color 0.35s ease, caret-color 0.35s ease;
-    }
-    body.toggled input {
-      color: #fff;
-      caret-color: #fff;
+      caret-color: color-mix(in srgb, #fff calc(var(--hit) * 100%), #111);
     }
     input::-webkit-search-cancel-button { display: none; }
