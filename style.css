@@ -343,6 +343,7 @@
       height: 20px;
       pointer-events: none;
       overflow: visible;
+      transform: scaleX(-1);
     }
     .tail path {
       fill: color-mix(in srgb, #000 calc(var(--hit) * 100%), #fff);
