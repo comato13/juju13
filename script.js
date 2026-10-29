@@ -273,8 +273,10 @@
         });
         suggestion = match ? match.label : "";
       }
-      ghost.textContent = suggestion;
-      sizer.textContent = suggestion || value || reserve || " ";
+      const prompt = "Type anything to look me up";
+      const showPrompt = !value && !reserve && !suggestion;
+      ghost.textContent = suggestion || (showPrompt ? prompt : "");
+      sizer.textContent = suggestion || value || reserve || prompt;
       const field = input.closest(".field");
       const hasText = Boolean(value || reserve);
       field.classList.toggle("is-empty", !hasText);
