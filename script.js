@@ -46,36 +46,23 @@
     window.onresize = () => createGrid();
 
     const irises = document.querySelectorAll(".eye");
-    const eyeWidth = 7;
-    const cat = document.querySelector(".cat");
-
-    function resetIrises() {
-      irises.forEach((iris) => {
-        const irisBefore = iris.querySelector(".iris-before");
-        irisBefore.style.transform = "translate(-50%, -50%)";
-        irisBefore.style.width = eyeWidth + "px";
-      });
-    }
+    const maxLookX = 6;
+    const maxLookY = 6;
 
     function moveIrises(event) {
-      const rect = cat.getBoundingClientRect();
-      const catCenterX = rect.left + rect.width / 2;
-      const catCenterLowerY = rect.top + rect.height;
-      const catCenterUpperY = rect.top;
-      const distanceToCenterX = event.clientX - catCenterX;
-
-      if (Math.abs(distanceToCenterX) <= 800 && catCenterLowerY >= event.clientY && catCenterUpperY <= event.clientY) {
-        irises.forEach((iris) => {
-          const irisBefore = iris.querySelector(".iris-before");
-          irisBefore.style.width = "14px";
-          const newX = distanceToCenterX > 0
-            ? Math.min(0.1, distanceToCenterX)
-            : Math.max(-12, distanceToCenterX);
-          irisBefore.style.transform = "translateX(" + newX + "px) translateY(-50%)";
-        });
-      } else {
-        resetIrises();
-      }
+      irises.forEach((eye) => {
+        const pupil = eye.querySelector(".iris-before");
+        const box = eye.getBoundingClientRect();
+        const dx = event.clientX - (box.left + box.width / 2);
+        const dy = event.clientY - (box.top + box.height / 2);
+        const nx = dx / maxLookX;
+        const ny = dy / maxLookY;
+        const mag = Math.hypot(nx, ny) || 1;
+        const clamp = Math.min(1, 1 / mag);
+        const x = nx * clamp * maxLookX;
+        const y = ny * clamp * maxLookY;
+        pupil.style.transform = "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))";
+      });
     }
 
     document.addEventListener("mousemove", moveIrises);
