@@ -290,7 +290,7 @@
       padding: 0;
       font: inherit;
       font-family: "Ancient Medium", system-ui, sans-serif;
-      font-size: 11px;
+      font-size: 20px;
       line-height: 1.2;
       --hit: 0;
       color: color-mix(in srgb, #161616 calc(var(--hit) * 100%), #fff);
