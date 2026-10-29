@@ -129,7 +129,8 @@
 
     document.addEventListener("mousemove", moveIrises);
 
-    const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv", "music"];
+    let links = [];
+    let slots = [];
     const input = document.getElementById("q");
     const ghost = document.getElementById("ghost");
     const sizer = document.getElementById("sizer");
@@ -144,22 +145,37 @@
     const motions = new Map();
 
     const rings = [
-      { period: 12, turn: 1 },
-      { period: 16, turn: -1 },
-      { period: 14, turn: 1 },
-      { period: 18, turn: -1 },
-      { period: 13, turn: 1 },
-      { period: 17, turn: -1 }
+      { period: 9, turn: 1, eccentricity: 0.62 },
+      { period: 13, turn: -1, eccentricity: 0.4 },
+      { period: 11, turn: 1, eccentricity: 0.55 },
+      { period: 16, turn: -1, eccentricity: 0.34 },
+      { period: 10, turn: 1, eccentricity: 0.7 },
+      { period: 14, turn: -1, eccentricity: 0.48 }
     ];
 
-    const slots = terms.map((term, index) => {
+    function parseLinks(text) {
+      const items = [];
+      text.split(/\r?\n/).forEach((raw) => {
+        const line = raw.trim();
+        if (!line || line.startsWith("#")) return;
+        const arrow = line.indexOf("->");
+        if (arrow === -1) return;
+        const label = line.slice(0, arrow).trim();
+        const url = line.slice(arrow + 2).trim();
+        if (label && url) items.push({ label, url });
+      });
+      return items;
+    }
+
+    function buildOrbits() {
+      orbit.replaceChildren();
+      slots = links.map((item, index) => {
+      const term = item.label;
       const motion = rings[index % rings.length];
-      const angle = 137.5 * index;
       const ring = document.createElement("div");
       ring.className = "ring";
       const slot = document.createElement("div");
       slot.className = "slot";
-      slot.style.setProperty("--angle", angle + "deg");
       const label = document.createElement("button");
       label.type = "button";
       label.className = "rec";
@@ -180,18 +196,37 @@
         state: "orbit",
         period: motion.period,
         turn: motion.turn,
-        angle
+        eccentricity: motion.eccentricity,
+        tilt: index * 0.85,
+        semiMajor: 180
       };
       return entry;
     });
+    }
+
+    function eccentricAnomaly(mean, eccentricity) {
+      let anomaly = mean;
+      for (let step = 0; step < 6; step++) {
+        const slope = 1 - eccentricity * Math.cos(anomaly);
+        anomaly -= (anomaly - eccentricity * Math.sin(anomaly) - mean) / slope;
+      }
+      return anomaly;
+    }
 
     const orbitStart = performance.now();
     function spinOrbit(now) {
       const seconds = (now - orbitStart) / 1000;
       slots.forEach((entry) => {
-        const spin = (seconds / entry.period) * 360 * entry.turn;
-        entry.ring.style.transform = "rotate(" + spin + "deg)";
-        entry.label.style.transform = "translate(-50%, -50%) rotate(" + (-(spin + entry.angle)) + "deg)";
+        const mean = (seconds / entry.period) * Math.PI * 2 * entry.turn;
+        const anomaly = eccentricAnomaly(mean, entry.eccentricity);
+        const axis = entry.semiMajor;
+        const x = axis * (Math.cos(anomaly) - entry.eccentricity);
+        const y = axis * Math.sqrt(1 - entry.eccentricity * entry.eccentricity) * Math.sin(anomaly);
+        const cos = Math.cos(entry.tilt);
+        const sin = Math.sin(entry.tilt);
+        const left = x * cos - y * sin;
+        const top = x * sin + y * cos;
+        entry.label.style.transform = "translate(-50%, -50%) translate(" + left + "px, " + top + "px)";
       });
       requestAnimationFrame(spinOrbit);
     }
@@ -199,26 +234,34 @@
 
     function syncOrbit() {
       const half = Math.min(window.innerWidth, window.innerHeight) / 2;
-      const outer = Math.max(168, half - 36);
-      const inner = Math.min(146, Math.max(118, outer * 0.46));
-      const step = (outer - inner) / Math.max(1, terms.length - 1);
+      const farthest = Math.max(320, half - 48);
       slots.forEach((entry, index) => {
-        entry.slot.style.setProperty("--r", Math.round(inner + step * index) + "px");
+        const peri = 176 + (index % 4) * 14;
+        const apo = Math.min(farthest, Math.max(peri * 3.1, farthest - (index % 3) * 42));
+        entry.semiMajor = (apo + peri) / 2;
+        entry.eccentricity = (apo - peri) / (apo + peri);
       });
     }
 
-    syncOrbit();
+    fetch("links.txt")
+      .then((response) => response.text())
+      .then((text) => {
+        links = parseLinks(text);
+        buildOrbits();
+        syncOrbit();
+        paint();
+      });
 
     function paint() {
       const value = input.value;
       const folded = value.toLowerCase();
       suggestion = "";
       if (folded && !reserve) {
-        const match = terms.find((term) => {
-          const foldedTerm = term.toLowerCase();
+        const match = links.find((item) => {
+          const foldedTerm = item.label.toLowerCase();
           return foldedTerm.startsWith(folded) && foldedTerm !== folded;
         });
-        suggestion = match || "";
+        suggestion = match ? match.label : "";
       }
       ghost.textContent = suggestion;
       sizer.textContent = suggestion || value || reserve || " ";
@@ -380,13 +423,12 @@
     function destination(query) {
       const word = query.trim().toLowerCase();
       if (!word) return "";
-      if (word === "fb" || word === "facebook") return "https://www.facebook.com/cloud.sep0/";
-      const likeInstagram = word === "ig"
-        || word === "insta"
-        || word.startsWith("instag")
-        || editDistance(word, "instagram") <= 2;
-      if (likeInstagram) return "https://www.instagram.com/13m.juju/";
-      if (word === "music") return "https://www.youtube.com/watch?v=09-iCp0gwXQ";
+      const exact = links.find((item) => item.label.toLowerCase() === word);
+      if (exact) return exact.url;
+      const prefixed = links.filter((item) => item.label.toLowerCase().startsWith(word));
+      if (prefixed.length === 1) return prefixed[0].url;
+      const close = links.filter((item) => editDistance(word, item.label.toLowerCase()) <= 2);
+      if (close.length === 1) return close[0].url;
       return "https://www.google.com/search?q=" + encodeURIComponent(query.trim());
     }
 
