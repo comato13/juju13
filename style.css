@@ -246,6 +246,7 @@
       display: inline-grid;
       background: #fff;
       max-width: calc(100vw - 48px);
+      border-radius: 999px;
       transition: background 0.35s ease;
     }
     body.toggled .field { background: #000; }
