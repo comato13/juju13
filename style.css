@@ -174,8 +174,8 @@
       height: 24px;
       z-index: 5;
     }
-    .cat .whiskers.left { left: 8px; }
-    .cat .whiskers.right { right: 8px; }
+    .cat .whiskers.left { right: 8px; left: auto; }
+    .cat .whiskers.right { left: 8px; right: auto; }
     .cat .whiskers span {
       position: absolute;
       left: 0;
