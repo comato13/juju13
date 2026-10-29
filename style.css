@@ -135,11 +135,10 @@
       position: absolute;
       border: 3px solid #111;
       background: #f4f4f4;
-      width: 26px;
-      height: 26px;
-      top: 40px;
+      width: 24px;
+      height: 14px;
+      top: 45px;
       border-radius: 50%;
-      overflow: hidden;
     }
     .cat .eye.left { left: 50px; margin: 0 0 0 -15px; }
     .cat .eye.right { right: 50px; margin: 0 -15px 0 0; }
@@ -217,15 +216,15 @@
       top: 79px;
     }
     .iris-before {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 14px;
       background: #111;
       border-radius: 50%;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      transition: transform 0.08s linear;
+      transition: transform 0.12s ease, width 0.12s ease;
     }
 
     main {

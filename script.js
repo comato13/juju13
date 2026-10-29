@@ -46,10 +46,30 @@
     window.onresize = () => createGrid();
 
     const irises = document.querySelectorAll(".eye");
-    const maxLookX = 6;
-    const maxLookY = 6;
+    const cat = document.querySelector(".cat");
+    const maxLookX = 5;
+    const maxLookY = 4;
+
+    function resetIrises() {
+      irises.forEach((eye) => {
+        const pupil = eye.querySelector(".iris-before");
+        pupil.style.transform = "translate(-50%, -50%)";
+        pupil.style.width = "7px";
+      });
+    }
 
     function moveIrises(event) {
+      const rect = cat.getBoundingClientRect();
+      const catCenterX = rect.left + rect.width / 2;
+      const inRange = Math.abs(event.clientX - catCenterX) <= 800
+        && event.clientY >= rect.top
+        && event.clientY <= rect.bottom;
+
+      if (!inRange) {
+        resetIrises();
+        return;
+      }
+
       irises.forEach((eye) => {
         const pupil = eye.querySelector(".iris-before");
         const box = eye.getBoundingClientRect();
@@ -61,6 +81,7 @@
         const clamp = Math.min(1, 1 / mag);
         const x = nx * clamp * maxLookX;
         const y = ny * clamp * maxLookY;
+        pupil.style.width = "14px";
         pupil.style.transform = "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))";
       });
     }
