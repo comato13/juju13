@@ -1,0 +1,286 @@
+﻿    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      height: 100%;
+    }
+    body {
+      background: #fff;
+      color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      animation: background-pan 10s linear infinite;
+      background-size: 200%;
+      height: 100vh;
+      overflow: hidden;
+    }
+    body.toggled {
+      animation: none;
+    }
+
+    @keyframes background-pan {
+      from { background-position: 0% center; }
+      to { background-position: -200% center; }
+    }
+
+    #tiles {
+      height: calc(100vh - 1px);
+      width: calc(100vw - 1px);
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(var(--columns), 1fr);
+      grid-template-rows: repeat(var(--rows), 1fr);
+    }
+    .tile {
+      cursor: pointer;
+      position: relative;
+    }
+    .tile:before {
+      background-color: #000;
+      content: "";
+      inset: 0;
+      position: absolute;
+    }
+
+    .cat {
+      position: absolute;
+      background: #d9d9d9;
+      width: 150px;
+      height: 120px;
+      border-radius: 150px 150px 50% 50%;
+      left: 50%;
+      top: 50%;
+      margin: -60px 0 0 -75px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .stripe .stripe1 {
+      position: relative;
+      background: #3a3a3a;
+      border-radius: 30px 30px 150px 150px;
+      top: -49.8px;
+      width: 10px;
+      height: 32px;
+      left: 47%;
+      z-index: 4;
+    }
+    .stripe .stripe2 {
+      position: relative;
+      background: #3a3a3a;
+      border-radius: 190px 0 150px 150px;
+      top: -82px;
+      width: 10px;
+      height: 20px;
+      left: 37%;
+      z-index: 4;
+    }
+    .stripe .stripe3 {
+      position: relative;
+      background: #3a3a3a;
+      border-radius: 0 190px 150px 150px;
+      top: -101px;
+      width: 10px;
+      height: 20px;
+      left: 57%;
+      z-index: 4;
+    }
+    .cat .ear {
+      background: #d9d9d9;
+      position: relative;
+      z-index: -1;
+    }
+    .cat .ear.left {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px 20px 20px 20px;
+      left: 5px;
+      top: 5px;
+    }
+    .cat .ear.left:before {
+      content: "";
+      display: block;
+      width: 25px;
+      height: 25px;
+      background: #bdbdbd;
+      border-radius: 10px 40px 30px 40px;
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      border: 2px solid #8a8a8a;
+      border-right: 0;
+      border-bottom: 0;
+    }
+    .cat .ear.right {
+      width: 50px;
+      height: 50px;
+      border-radius: 20px 8px 20px 20px;
+      position: absolute;
+      right: 5px;
+      top: 5px;
+    }
+    .cat .ear.right:before {
+      content: "";
+      display: block;
+      width: 25px;
+      height: 25px;
+      background: #bdbdbd;
+      border-radius: 40px 8px 40px 30px;
+      position: absolute;
+      right: 4px;
+      top: 4px;
+      border: 2px solid #8a8a8a;
+      border-left: 0;
+      border-bottom: 0;
+    }
+    .cat .eye {
+      position: absolute;
+      border: 3px solid #111;
+      background: #f4f4f4;
+      width: 24px;
+      height: 14px;
+      top: 45px;
+      border-radius: 50%;
+    }
+    .cat .eye.left { left: 50px; margin: 0 0 0 -15px; }
+    .cat .eye.right { right: 50px; margin: 0 -15px 0 0; }
+    .cat .nose {
+      width: 16px;
+      height: 10px;
+      background: #111;
+      border-radius: 50%;
+      position: absolute;
+      top: 65px;
+      left: 50%;
+      margin: 0 0 0 -8px;
+    }
+    .cat .nose:before,
+    .cat .nose:after {
+      content: "";
+      display: block;
+      background: #cfcfcf;
+      width: 18px;
+      height: 12px;
+      border-radius: 50%;
+      position: absolute;
+      top: 6px;
+    }
+    .cat .nose:before { left: -10px; }
+    .cat .nose:after { left: 8px; }
+    .cat .mouth {
+      border: 3px solid #111;
+      width: 12px;
+      height: 12px;
+      border-right: 0;
+      border-bottom: 0;
+      position: absolute;
+      left: 68px;
+      top: 79px;
+      transform: rotate(45deg);
+    }
+    .cat .mouth:before {
+      content: "";
+      display: block;
+      width: 5px;
+      border-top: 3px solid #111;
+      position: absolute;
+      left: -6px;
+      top: -5px;
+      transform: rotate(45deg);
+    }
+    .cat .mouth:after {
+      content: "";
+      display: block;
+      width: 10px;
+      height: 10px;
+      border: 3px solid #111;
+      border-radius: 0 0 30px 50%;
+      border-left: 0;
+      border-top: 0;
+      border-bottom-width: 2px;
+      position: absolute;
+      left: -13px;
+      top: 8px;
+    }
+    .cat .mouth1:after {
+      content: "";
+      display: block;
+      width: 10px;
+      height: 10px;
+      border: 3px solid #111;
+      border-radius: 0 0 30px 50%;
+      border-left: 0;
+      border-top: 0;
+      border-bottom-width: 2px;
+      position: absolute;
+      transform: rotateY(180deg) rotate(45deg);
+      left: 83px;
+      top: 79px;
+    }
+    .iris-before {
+      width: 7px;
+      height: 14px;
+      background: #111;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: transform 0.3s ease, width 0.3s ease;
+    }
+
+    main {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 4;
+      pointer-events: none;
+    }
+    form {
+      width: auto;
+      pointer-events: auto;
+      transform: translateY(-108px);
+    }
+    .field {
+      display: inline-grid;
+      background: #fff;
+      max-width: calc(100vw - 48px);
+      transition: background 0.35s ease;
+    }
+    body.toggled .field { background: #000; }
+    .sizer, .ghost, input {
+      grid-area: 1 / 1;
+      font-family: inherit;
+      font-size: 18px;
+      line-height: 1.2;
+      padding: 4px 8px;
+      border: 0;
+      border-radius: 0;
+      white-space: pre;
+    }
+    .sizer {
+      visibility: hidden;
+      min-width: 1ch;
+    }
+    .ghost {
+      color: #9a9a9a;
+      pointer-events: none;
+      overflow: hidden;
+      transition: color 0.35s ease;
+    }
+    body.toggled .ghost { color: #6e6e6e; }
+    input {
+      width: 100%;
+      min-width: 0;
+      background: transparent;
+      color: #111;
+      outline: none;
+      caret-color: #111;
+      transition: color 0.35s ease, caret-color 0.35s ease;
+    }
+    body.toggled input {
+      color: #fff;
+      caret-color: #fff;
+    }
+    input::-webkit-search-cancel-button { display: none; }
