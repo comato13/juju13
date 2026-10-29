@@ -126,7 +126,7 @@
 
     document.addEventListener("mousemove", moveIrises);
 
-    const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv"];
+    const terms = ["Facebook", "fb", "ig", "Instagram", "game", "cv", "music"];
     const input = document.getElementById("q");
     const ghost = document.getElementById("ghost");
     const sizer = document.getElementById("sizer");
@@ -164,6 +164,7 @@
         || word.startsWith("instag")
         || editDistance(word, "instagram") <= 2;
       if (likeInstagram) return "https://www.instagram.com/13m.juju/";
+      if (word === "music") return "https://www.youtube.com/watch?v=09-iCp0gwXQ";
       return "https://www.google.com/search?q=" + encodeURIComponent(query.trim());
     }
 
