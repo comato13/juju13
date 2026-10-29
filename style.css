@@ -350,7 +350,7 @@
       min-width: 0;
     }
     .field.is-empty .sizer {
-      min-width: 8.5em;
+      min-width: 2.125em;
     }
     .field.is-picked {
       --field-pad: 1.6em;

@@ -199,8 +199,12 @@
         turn: motion.turn,
         eccentricity: motion.eccentricity,
         tilt: index * 0.85,
-        semiMajor: 180
+        semiMajor: 180,
+        mean: 0,
+        hover: false
       };
+      label.addEventListener("mouseenter", () => { entry.hover = true; });
+      label.addEventListener("mouseleave", () => { entry.hover = false; });
       return entry;
     });
     }
@@ -214,20 +218,25 @@
       return anomaly;
     }
 
-    const orbitStart = performance.now();
+    let orbitStamp = 0;
+    function place(entry) {
+      const anomaly = eccentricAnomaly(entry.mean, entry.eccentricity);
+      const axis = entry.semiMajor;
+      const x = axis * (Math.cos(anomaly) - entry.eccentricity);
+      const y = axis * Math.sqrt(1 - entry.eccentricity * entry.eccentricity) * Math.sin(anomaly);
+      const cos = Math.cos(entry.tilt);
+      const sin = Math.sin(entry.tilt);
+      const left = x * cos - y * sin;
+      const top = x * sin + y * cos;
+      entry.label.style.transform = "translate(-50%, -50%) translate(" + left + "px, " + top + "px)";
+    }
+
     function spinOrbit(now) {
-      const seconds = (now - orbitStart) / 1000;
+      const dt = orbitStamp ? (now - orbitStamp) / 1000 : 0;
+      orbitStamp = now;
       slots.forEach((entry) => {
-        const mean = (seconds / entry.period) * Math.PI * 2 * entry.turn;
-        const anomaly = eccentricAnomaly(mean, entry.eccentricity);
-        const axis = entry.semiMajor;
-        const x = axis * (Math.cos(anomaly) - entry.eccentricity);
-        const y = axis * Math.sqrt(1 - entry.eccentricity * entry.eccentricity) * Math.sin(anomaly);
-        const cos = Math.cos(entry.tilt);
-        const sin = Math.sin(entry.tilt);
-        const left = x * cos - y * sin;
-        const top = x * sin + y * cos;
-        entry.label.style.transform = "translate(-50%, -50%) translate(" + left + "px, " + top + "px)";
+        if (!entry.hover) entry.mean += (dt / entry.period) * Math.PI * 2 * entry.turn;
+        place(entry);
       });
       requestAnimationFrame(spinOrbit);
     }
