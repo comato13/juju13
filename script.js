@@ -144,22 +144,20 @@
     const motions = new Map();
 
     const rings = [
-      { period: 12, turn: 1 },
-      { period: 16, turn: -1 },
-      { period: 14, turn: 1 },
-      { period: 18, turn: -1 },
-      { period: 13, turn: 1 },
-      { period: 17, turn: -1 }
+      { period: 9, turn: 1, eccentricity: 0.62 },
+      { period: 13, turn: -1, eccentricity: 0.4 },
+      { period: 11, turn: 1, eccentricity: 0.55 },
+      { period: 16, turn: -1, eccentricity: 0.34 },
+      { period: 10, turn: 1, eccentricity: 0.7 },
+      { period: 14, turn: -1, eccentricity: 0.48 }
     ];
 
     const slots = terms.map((term, index) => {
       const motion = rings[index % rings.length];
-      const angle = 137.5 * index;
       const ring = document.createElement("div");
       ring.className = "ring";
       const slot = document.createElement("div");
       slot.className = "slot";
-      slot.style.setProperty("--angle", angle + "deg");
       const label = document.createElement("button");
       label.type = "button";
       label.className = "rec";
@@ -180,18 +178,36 @@
         state: "orbit",
         period: motion.period,
         turn: motion.turn,
-        angle
+        eccentricity: motion.eccentricity,
+        tilt: index * 0.85,
+        semiMajor: 180
       };
       return entry;
     });
+
+    function eccentricAnomaly(mean, eccentricity) {
+      let anomaly = mean;
+      for (let step = 0; step < 6; step++) {
+        const slope = 1 - eccentricity * Math.cos(anomaly);
+        anomaly -= (anomaly - eccentricity * Math.sin(anomaly) - mean) / slope;
+      }
+      return anomaly;
+    }
 
     const orbitStart = performance.now();
     function spinOrbit(now) {
       const seconds = (now - orbitStart) / 1000;
       slots.forEach((entry) => {
-        const spin = (seconds / entry.period) * 360 * entry.turn;
-        entry.ring.style.transform = "rotate(" + spin + "deg)";
-        entry.label.style.transform = "translate(-50%, -50%) rotate(" + (-(spin + entry.angle)) + "deg)";
+        const mean = (seconds / entry.period) * Math.PI * 2 * entry.turn;
+        const anomaly = eccentricAnomaly(mean, entry.eccentricity);
+        const axis = entry.semiMajor;
+        const x = axis * (Math.cos(anomaly) - entry.eccentricity);
+        const y = axis * Math.sqrt(1 - entry.eccentricity * entry.eccentricity) * Math.sin(anomaly);
+        const cos = Math.cos(entry.tilt);
+        const sin = Math.sin(entry.tilt);
+        const left = x * cos - y * sin;
+        const top = x * sin + y * cos;
+        entry.label.style.transform = "translate(-50%, -50%) translate(" + left + "px, " + top + "px)";
       });
       requestAnimationFrame(spinOrbit);
     }
@@ -199,11 +215,12 @@
 
     function syncOrbit() {
       const half = Math.min(window.innerWidth, window.innerHeight) / 2;
-      const outer = Math.max(168, half - 36);
-      const inner = Math.min(146, Math.max(118, outer * 0.46));
-      const step = (outer - inner) / Math.max(1, terms.length - 1);
+      const farthest = Math.max(320, half - 48);
       slots.forEach((entry, index) => {
-        entry.slot.style.setProperty("--r", Math.round(inner + step * index) + "px");
+        const peri = 176 + (index % 4) * 14;
+        const apo = Math.min(farthest, Math.max(peri * 3.1, farthest - (index % 3) * 42));
+        entry.semiMajor = (apo + peri) / 2;
+        entry.eccentricity = (apo - peri) / (apo + peri);
       });
     }
 

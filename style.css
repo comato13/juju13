@@ -273,7 +273,6 @@
       position: absolute;
       left: 0;
       top: 0;
-      transform: rotate(var(--angle)) translateY(calc(var(--r) * -1));
     }
     .rec {
       position: absolute;
