@@ -9,7 +9,7 @@
       height: 100%;
     }
     body {
-      background: #fff;
+      background: #ce7da5;
       color: #fff;
       font-family: system-ui, -apple-system, Segoe UI, sans-serif;
       animation: background-pan 10s linear infinite;
@@ -48,7 +48,7 @@
 
     .cat {
       position: absolute;
-      background: #d9d9d9;
+      background: color-mix(in srgb, #fa9b28 calc(var(--hit) * 100%), #fcf4e9);
       width: 150px;
       height: 120px;
       border-radius: 150px 150px 50% 50%;
@@ -58,11 +58,11 @@
       z-index: 3;
       pointer-events: none;
       --hit: 0;
-      filter: invert(var(--hit));
     }
     .stripe .stripe1 {
       position: relative;
-      background: #3a3a3a;
+      background: #875203;
+      opacity: var(--hit);
       border-radius: 30px 30px 150px 150px;
       top: -49.8px;
       width: 10px;
@@ -72,7 +72,8 @@
     }
     .stripe .stripe2 {
       position: relative;
-      background: #3a3a3a;
+      background: #875203;
+      opacity: var(--hit);
       border-radius: 190px 0 150px 150px;
       top: -82px;
       width: 10px;
@@ -82,7 +83,8 @@
     }
     .stripe .stripe3 {
       position: relative;
-      background: #3a3a3a;
+      background: #875203;
+      opacity: var(--hit);
       border-radius: 0 190px 150px 150px;
       top: -101px;
       width: 10px;
@@ -91,7 +93,7 @@
       z-index: 4;
     }
     .cat .ear {
-      background: #d9d9d9;
+      background: color-mix(in srgb, #fa9b28 calc(var(--hit) * 100%), #ca9c6f);
       position: relative;
       z-index: -1;
     }
@@ -107,12 +109,12 @@
       display: block;
       width: 25px;
       height: 25px;
-      background: #bdbdbd;
+      background: color-mix(in srgb, pink calc(var(--hit) * 100%), #e8c5cb);
       border-radius: 10px 40px 30px 40px;
       position: absolute;
       left: 4px;
       top: 4px;
-      border: 2px solid #8a8a8a;
+      border: 2px solid #c99;
       border-right: 0;
       border-bottom: 0;
     }
@@ -129,19 +131,19 @@
       display: block;
       width: 25px;
       height: 25px;
-      background: #bdbdbd;
+      background: color-mix(in srgb, pink calc(var(--hit) * 100%), #e8c5cb);
       border-radius: 40px 8px 40px 30px;
       position: absolute;
       right: 4px;
       top: 4px;
-      border: 2px solid #8a8a8a;
+      border: 2px solid #c99;
       border-left: 0;
       border-bottom: 0;
     }
     .cat .eye {
       position: absolute;
-      border: 3px solid #111;
-      background: #f4f4f4;
+      border: 3px solid #000;
+      background: color-mix(in srgb, #b8dff5 calc(var(--hit) * 100%), #d2f268);
       width: 24px;
       height: 14px;
       top: 45px;
@@ -152,7 +154,7 @@
     .cat .nose {
       width: 16px;
       height: 10px;
-      background: #111;
+      background: #000;
       border-radius: 50%;
       position: absolute;
       top: 65px;
@@ -163,7 +165,7 @@
     .cat .nose:after {
       content: "";
       display: block;
-      background: #cfcfcf;
+      background: color-mix(in srgb, #fcc47e calc(var(--hit) * 100%), #ca9c6f);
       width: 18px;
       height: 12px;
       border-radius: 50%;
@@ -186,7 +188,7 @@
       left: 0;
       width: 26px;
       height: 2px;
-      background: #111;
+      background: color-mix(in srgb, #875203 calc(var(--hit) * 100%), #000);
       border-radius: 2px;
     }
     .cat .whiskers.right span { left: auto; right: 0; }
@@ -197,7 +199,7 @@
     .cat .whiskers.right span:nth-child(2) { top: 10px; }
     .cat .whiskers.right span:nth-child(3) { top: 18px; transform: rotate(-16deg); transform-origin: left center; }
     .cat .mouth {
-      border: 3px solid #111;
+      border: 3px solid #000;
       width: 12px;
       height: 12px;
       border-right: 0;
@@ -211,7 +213,7 @@
       content: "";
       display: block;
       width: 5px;
-      border-top: 3px solid #111;
+      border-top: 3px solid #000;
       position: absolute;
       left: -6px;
       top: -5px;
@@ -222,7 +224,7 @@
       display: block;
       width: 10px;
       height: 10px;
-      border: 3px solid #111;
+      border: 3px solid #000;
       border-radius: 0 0 30px 50%;
       border-left: 0;
       border-top: 0;
@@ -236,7 +238,7 @@
       display: block;
       width: 10px;
       height: 10px;
-      border: 3px solid #111;
+      border: 3px solid #000;
       border-radius: 0 0 30px 50%;
       border-left: 0;
       border-top: 0;
@@ -249,7 +251,7 @@
     .iris-before {
       width: 7px;
       height: 14px;
-      background: #111;
+      background: #000;
       border-radius: 50%;
       position: absolute;
       top: 50%;
@@ -298,6 +300,7 @@
       cursor: pointer;
       pointer-events: auto;
       user-select: none;
+      opacity: 0.5;
       text-shadow: 0 1px 2px rgb(0 0 0 / calc((1 - var(--hit)) * 0.45));
     }
     .rec:hover { text-decoration: underline; text-underline-offset: 0.22em; }
