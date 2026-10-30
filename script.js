@@ -26,7 +26,7 @@
     };
 
     const syncColors = () => {
-      document.querySelectorAll(".cat, .field, .rec").forEach((element) => {
+      document.querySelectorAll(".cat, .field, .rec, .enter").forEach((element) => {
         element.style.setProperty("--hit", hitAmount(element).toFixed(3));
       });
     };
@@ -281,6 +281,7 @@
       const hasText = Boolean(value || reserve);
       field.classList.toggle("is-empty", !hasText);
       field.classList.toggle("is-picked", Boolean(held));
+      document.getElementById("enter").hidden = !hasText;
       fitField();
     }
 

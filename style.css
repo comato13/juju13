@@ -322,9 +322,26 @@
       pointer-events: none;
     }
     form {
+      position: relative;
       width: auto;
       pointer-events: auto;
       transform: translateY(-108px);
+    }
+    .enter {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 14px);
+      transform: translateX(-50%);
+      margin: 0;
+      --hit: 0;
+      font-family: "Ancient Medium", system-ui, sans-serif;
+      font-size: 22px;
+      line-height: 1;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      color: color-mix(in srgb, #161616 calc(var(--hit) * 100%), #fff);
+      text-shadow: 0 1px 2px rgb(0 0 0 / calc((1 - var(--hit)) * 0.45));
     }
     .field {
       display: inline-grid;
