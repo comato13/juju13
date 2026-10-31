@@ -89,8 +89,6 @@
 
     const irises = document.querySelectorAll(".eye");
     const cat = document.querySelector(".cat");
-    const maxLookX = 5;
-    const maxLookY = 4;
 
     function resetIrises() {
       irises.forEach((eye) => {
@@ -114,21 +112,71 @@
 
       irises.forEach((eye) => {
         const pupil = eye.querySelector(".iris-before");
+        const pupilW = 14;
+        const pupilH = 14;
+        pupil.style.width = pupilW + "px";
+        const limitX = Math.max(0, (eye.clientWidth - pupilW) / 2);
+        const limitY = Math.max(0, (eye.clientHeight - pupilH) / 2);
         const box = eye.getBoundingClientRect();
         const dx = event.clientX - (box.left + box.width / 2);
         const dy = event.clientY - (box.top + box.height / 2);
-        const nx = dx / maxLookX;
-        const ny = dy / maxLookY;
+        const nx = limitX ? dx / limitX : 0;
+        const ny = limitY ? dy / limitY : 0;
         const mag = Math.hypot(nx, ny) || 1;
         const clamp = Math.min(1, 1 / mag);
-        const x = nx * clamp * maxLookX;
-        const y = ny * clamp * maxLookY;
-        pupil.style.width = "14px";
+        const x = nx * clamp * limitX;
+        const y = ny * clamp * limitY;
         pupil.style.transform = "translate(calc(-50% + " + x + "px), calc(-50% + " + y + "px))";
       });
     }
 
     document.addEventListener("mousemove", moveIrises);
+
+    const audio = document.getElementById("music");
+    let volumeStep = 5;
+    audio.volume = volumeStep / 10;
+    const note = document.querySelector(".note");
+
+    function setVolume(step) {
+      volumeStep = Math.max(0, Math.min(10, step));
+      audio.volume = volumeStep / 10;
+    }
+
+    function syncNote() {
+      const playing = !audio.paused && !audio.muted;
+      note.classList.toggle("is-playing", playing);
+      note.classList.toggle("is-muted", audio.muted);
+      note.setAttribute("aria-pressed", audio.muted ? "true" : "false");
+      note.setAttribute("aria-label", audio.muted ? "Unmute music" : "Mute music");
+    }
+
+    function playMusic() {
+      if (audio.muted) return;
+      audio.play().then(syncNote).catch(() => {});
+    }
+
+    audio.addEventListener("play", syncNote);
+    audio.addEventListener("pause", syncNote);
+    playMusic();
+    document.addEventListener("pointerdown", (event) => {
+      if (event.target.closest(".note")) return;
+      playMusic();
+    });
+
+    document.querySelector(".ear.left").addEventListener("click", (event) => {
+      event.stopPropagation();
+      setVolume(volumeStep - 1);
+    });
+    document.querySelector(".ear.right").addEventListener("click", (event) => {
+      event.stopPropagation();
+      setVolume(volumeStep + 1);
+    });
+    note.addEventListener("click", (event) => {
+      event.stopPropagation();
+      audio.muted = !audio.muted;
+      syncNote();
+      if (!audio.muted) playMusic();
+    });
 
     let links = [];
     let slots = [];

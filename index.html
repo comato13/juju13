@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>About me</title>
-  <link rel="stylesheet" href="style.css?v=22">
+  <link rel="stylesheet" href="style.css?v=26">
 </head>
 <body>
+  <audio id="music" src="until-i-know.mp3" loop></audio>
   <div id="tiles"></div>
   <div class="cat">
     <div class="head">
@@ -14,6 +15,11 @@
       <div class="ear right"></div>
       <div class="eye left"><div class="iris-before"></div></div>
       <div class="eye right"><div class="iris-before"></div></div>
+      <button class="note" type="button" aria-label="Mute music" aria-pressed="false">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M6.2 13.4a2.15 2.15 0 1 1-1.55-2.05V1.6h8.1v2.15H6.9v7.35a2.15 2.15 0 0 1-.7 2.3z"/>
+        </svg>
+      </button>
       <div class="nose"></div>
       <div class="whiskers left"><span></span><span></span><span></span></div>
       <div class="whiskers right"><span></span><span></span><span></span></div>
@@ -41,6 +47,6 @@
     </form>
   </main>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-  <script src="script.js?v=11"></script>
+  <script src="script.js?v=15"></script>
 </body>
 </html>
