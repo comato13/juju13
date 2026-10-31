@@ -133,7 +133,7 @@
     document.addEventListener("mousemove", moveIrises);
 
     const audio = document.getElementById("music");
-    let volumeStep = 3;
+    let volumeStep = 2;
     audio.volume = volumeStep / 10;
     const note = document.querySelector(".note");
 
